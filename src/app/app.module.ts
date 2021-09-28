@@ -7,10 +7,12 @@ import { AppComponent } from './app.component';
 import { CreateModule } from './modules/create/create.module';
 import { DetailModule } from './modules/detail/detail.module';
 import { ListModule } from './modules/list/list.module';
+import { ModalComponent } from './shared/modal/modal.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
