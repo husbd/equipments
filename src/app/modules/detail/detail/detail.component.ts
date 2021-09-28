@@ -3,6 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Equipment } from 'src/app/models/equipment.model';
 import { CommonService } from 'src/app/services/common.service';
+import { ModalService } from 'src/app/shared/modal/modal.service';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class DetailComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private cmnServ: CommonService,
+    private modalServ: ModalService,
   ) { }
 
   /**
@@ -69,7 +71,7 @@ export class DetailComponent implements OnInit {
     const payload = this.equipmentForm.getRawValue();
     this.cmnServ.updateEquipmentById(payload.id, payload).subscribe(
       res => {
-        console.log(res);
+        this.openModal('Updated equipment successfully!');
       }
     );
   }
@@ -79,6 +81,13 @@ export class DetailComponent implements OnInit {
    */
   public onSubmit() {
     this.updateEquipmentById();
+  }
+
+  /**
+   * @description open a modal and show msg
+   */
+  private openModal(info: string) {
+    this.modalServ.open(info);
   }
 
 }
