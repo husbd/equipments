@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DetailRoutingModule } from './detail-routing.module';
 import { DetailComponent } from './detail/detail.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,6 +12,7 @@ import { DetailComponent } from './detail/detail.component';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     DetailRoutingModule
   ]
 })

@@ -21,7 +21,28 @@ td {
     padding-right: 20px;
 }
 
-button[buttonType=delete] {
-    background-color: red;
+button {
     color: #fff;
+}
+
+button:disabled {
+    background-color: #aaa !important;
+}
+
+.warn {
+    background-color: red;
+}
+
+.accept {
+    background-color: green;
+}
+
+label, input {
+    display: block;
+}
+
+input {
+    width: 25vw;
+    padding: 3px;
+    margin-bottom: 10px;
 }
