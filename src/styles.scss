@@ -5,20 +5,21 @@ body {
     justify-content: center;
 }
 
-tr {
-    height: 35px;
-}
-
-tr:hover {
-    background-color: #eee;
-}
-th {
-    background-color: #eee;
-    padding-right: 20px;
-    text-align: left;
-}
-td {
-    padding-right: 20px;
+table {
+    tr {
+        height: 35px;
+    }
+    tr:hover {
+        background-color: #eee;
+    }
+    th {
+        background-color: #eee;
+        padding-right: 20px;
+        text-align: left;
+    }
+    td {
+        padding-right: 20px;
+    }
 }
 
 button {

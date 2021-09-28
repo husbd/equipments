@@ -15,5 +15,8 @@
     <label for="manufactureDate">Manufacture Date: </label>
     <input id="manufactureDate" type="text" formControlName="manufactureDate">
     <a [routerLink]="['/list']">back</a>
-    <button type="submit" class="accept btn-submit" [disabled]="equipmentForm.invalid">Update</button>
+    <span class="btn-row">
+        <button type="submit" class="accept" [disabled]="equipmentForm.invalid">Update</button>
+        <button type="button" class="warn" (click)="onDelete()">Delete</button>
+    </span>
 </form>

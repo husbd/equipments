@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Equipment } from 'src/app/models/equipment.model';
 import { CommonService } from 'src/app/services/common.service';
-import { ModalService } from 'src/app/shared/modal/modal.service';
 
 @Component({
   selector: 'app-list',
@@ -12,10 +11,7 @@ export class ListComponent implements OnInit {
 
   equipments: Equipment[] = [];
 
-  constructor(
-    private cmnServ: CommonService,
-    private modalServ: ModalService,
-  ) { }
+  constructor(private cmnServ: CommonService) { }
 
   ngOnInit(): void {
     this.getEquipments();
@@ -30,13 +26,6 @@ export class ListComponent implements OnInit {
         this.equipments = res;
       }
     )
-  }
-
-  /**
-   * @description open a modal and show msg
-   */
-  public openModal() {
-    this.modalServ.open('Equipment deleted successfully!');
   }
 
 }

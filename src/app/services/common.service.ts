@@ -9,7 +9,6 @@ import { Equipment } from '../models/equipment.model';
 })
 export class CommonService {
 
-  readonly EQUIPMENTS_URL = `${environment.equipment}/equipments`;
 
   constructor(private http: HttpClient,) { }
 
@@ -18,7 +17,7 @@ export class CommonService {
    * @returns
    */
   getEquipments(): Observable<Equipment[]> {
-    return this.http.get<Equipment[]>(this.EQUIPMENTS_URL);
+    return this.http.get<Equipment[]>(environment.equipment);
   }
 
   /**
@@ -27,7 +26,7 @@ export class CommonService {
    * @returns 
    */
   getEquipmentById(id: string): Observable<Equipment> {
-    return this.http.get<Equipment>(`${this.EQUIPMENTS_URL}/${id}`);
+    return this.http.get<Equipment>(`${environment.equipment}/${id}`);
   }
 
   /**
@@ -37,8 +36,16 @@ export class CommonService {
    * @returns 
    */
   updateEquipmentById(id: string, payload: Equipment): Observable<Equipment> {
-    return this.http.put<Equipment>(`${this.EQUIPMENTS_URL}/${id}`, payload);
+    return this.http.put<Equipment>(`${environment.equipment}/${id}`, payload);
   }
 
+  /**
+   * @description Calls api to delete equipment by id
+   * @param id
+   * @returns 
+   */
+   deleteEquipmentById(id: string): Observable<any> {
+    return this.http.delete<any>(`${environment.equipment}/${id}`);
+  }
 
 }

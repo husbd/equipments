@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Equipment } from 'src/app/models/equipment.model';
 import { CommonService } from 'src/app/services/common.service';
@@ -23,9 +23,11 @@ export class DetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private cmnServ: CommonService,
     private modalServ: ModalService,
+    
   ) { }
 
   /**
@@ -74,6 +76,25 @@ export class DetailComponent implements OnInit {
         this.openModal('Updated equipment successfully!');
       }
     );
+  }
+
+  private deleteEquipmentById(id: string) {
+    this.cmnServ.deleteEquipmentById(id).subscribe(
+      res => {
+        this.openModal('Equipment deleted successfully!');
+        this.router.navigate(['list']);
+      }
+    )
+  }
+
+  public onDelete() {
+    const idControl = this.equipmentForm.get('id');
+    if (idControl !== null && idControl !== undefined) {
+      const _id = idControl.value;
+      if(confirm(`Are you sure to delete ${_id}?`)) {
+        this.deleteEquipmentById(_id);
+      }
+    }
   }
 
   /**

@@ -4,12 +4,10 @@
       <th>ID</th>
       <th>Model</th>
       <th>Manufacture Date</th>
-      <th>Action</th>
     </tr>
     <tr *ngFor="let equipment of equipments">
       <td>{{equipment.id}}</td>
       <td><a [routerLink]="['/detail', equipment.id]">{{equipment.model}}</a></td>
       <td>{{equipment.manufactureDate | date:'yyyy/MM/dd'}}</td>
-      <td><button class="warn" (click)="openModal()">delete</button></td>
     </tr>
 </table>
