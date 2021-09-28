@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DetailRoutingModule } from './detail-routing.module';
 import { DetailComponent } from './detail/detail.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -12,7 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
+    SharedModule,
     DetailRoutingModule
   ]
 })

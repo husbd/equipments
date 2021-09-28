@@ -1,0 +1,18 @@
+<form [formGroup]="equipmentForm">
+    <div *ngIf="hasId()">
+        <label for="Id">Id: </label>
+        <input id="id" type="text" formControlName="id">
+    </div>
+  
+    <label for="model">Model: </label>
+    <input id="model" type="text" formControlName="model">
+  
+    <label for="brand">Brand: </label>
+    <input id="brand" type="text" formControlName="brand">
+  
+    <label for="weight">Weight: </label>
+    <input id="weight" type="text" formControlName="weight">
+  
+    <label for="manufactureDate">Manufacture Date: </label>
+    <input id="manufactureDate" type="text" formControlName="manufactureDate">
+</form>
