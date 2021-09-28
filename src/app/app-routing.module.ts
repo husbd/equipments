@@ -5,7 +5,7 @@ const routes: Routes = [
   { path: 'list', loadChildren: () => import('./modules/list/list.module').then(m => m.ListModule) },
   { path: 'detail', loadChildren: () => import('./modules/detail/detail.module').then(m => m.DetailModule) },
   { path: 'create', loadChildren: () => import('./modules/create/create.module').then(m => m.CreateModule) },
-  { path: '',   redirectTo: '/list', pathMatch: 'full' },
+  { path: '', redirectTo: '/list', pathMatch: 'full' },
 ];
 
 @NgModule({
