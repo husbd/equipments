@@ -1,6 +1,6 @@
 <h1>Create New Equipment</h1>
 <app-equipment-form #formComponent></app-equipment-form>
-<a [routerLink]="['/list']">back</a>
+<a href="javascript:void(0)" (click)="redirectToList()">back</a>
 <span class="btn-row">
     <button class="accept" (click)="onSubmit(formComponent)" [disabled]="formComponent.isFormInvalid()">Create</button>
 </span>

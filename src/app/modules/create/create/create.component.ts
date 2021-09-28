@@ -43,6 +43,15 @@ export class CreateComponent implements OnInit {
   }
 
   /**
+   * @description confirm before redirect to list screen
+   */
+  public redirectToList() {
+    if (confirm('Your changes are not saved yet. Are you sure to leave this page?')) {
+      this.router.navigate(['list']);
+    }
+  }
+
+  /**
    * @description open a modal and show msg
    */
    private openModal(info: string) {
