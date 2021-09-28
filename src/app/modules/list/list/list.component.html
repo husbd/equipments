@@ -10,6 +10,6 @@
       <td>{{equipment.id}}</td>
       <td><a [routerLink]="['/detail', equipment.id]">{{equipment.model}}</a></td>
       <td>{{equipment.manufactureDate | date:'yyyy/MM/dd'}}</td>
-      <td><button buttonType="delete">delete</button></td>
+      <td><button class="warn">delete</button></td>
     </tr>
 </table>

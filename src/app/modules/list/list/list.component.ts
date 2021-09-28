@@ -24,7 +24,6 @@ export class ListComponent implements OnInit {
     this.cmnServ.getEquipments().subscribe(
       res => {
         this.equipments = res;
-        console.log(res);
       }
     )
   }

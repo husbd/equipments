@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { Equipment } from 'src/app/models/equipment.model';
+import { CommonService } from 'src/app/services/common.service';
+
 
 @Component({
   selector: 'app-detail',
@@ -8,15 +12,73 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 })
 export class DetailComponent implements OnInit {
 
-  id: string | undefined;
-  constructor(private route: ActivatedRoute) { }
+  equipmentForm = this.fb.group({
+    id: new FormControl({value: '', disabled: true}, Validators.required),
+    model: new FormControl('', Validators.required),
+    brand: new FormControl(''),
+    weight: new FormControl(''),
+    manufactureDate: new FormControl(''),
+  });
 
+  constructor(
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private cmnServ: CommonService,
+  ) { }
+
+  /**
+   * @description get id from query param & get detail by id 
+   */
   ngOnInit(): void {
     this.route.paramMap.subscribe(
       (params: ParamMap) => {
-        this.id = params.get('id') as string;
+        const id = params.get('id') as string;
+        this.getEquipmentById(id);
       }
-    )
+    );
+  }
+
+  /**
+   * @description call service to get detail by id
+   * @param id 
+   */
+  private getEquipmentById(id: string) {
+    this.cmnServ.getEquipmentById(id).subscribe(
+      res => {
+        this.populateForm(res);
+      }
+    );
+  }
+
+  /**
+   * @description populate form with input equipment obj
+   * @param equipment 
+   */
+  private populateForm(equipment: Equipment) {
+    this.equipmentForm.get('id')?.setValue(equipment.id);
+    this.equipmentForm.get('model')?.setValue(equipment.model);
+    this.equipmentForm.get('brand')?.setValue(equipment.brand);
+    this.equipmentForm.get('weight')?.setValue(equipment.weight);
+    this.equipmentForm.get('manufactureDate')?.setValue(equipment.manufactureDate);
+  }
+
+  /**
+   * @description call service to update equipment by id
+   */
+  private updateEquipmentById() {
+    const payload = this.equipmentForm.getRawValue();
+    this.cmnServ.updateEquipmentById(payload.id, payload).subscribe(
+      res => {
+        console.log(res);
+      }
+    );
+  }
+
+  /**
+   * @description on submit handler def
+   */
+  public onSubmit() {
+    this.updateEquipmentById();
   }
 
 }
