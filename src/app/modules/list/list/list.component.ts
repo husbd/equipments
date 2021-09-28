@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Equipment } from 'src/app/models/equipment.model';
 import { CommonService } from 'src/app/services/common.service';
 
@@ -11,7 +12,10 @@ export class ListComponent implements OnInit {
 
   equipments: Equipment[] = [];
 
-  constructor(private cmnServ: CommonService) { }
+  constructor(
+    private router: Router,
+    private cmnServ: CommonService
+  ) { }
 
   ngOnInit(): void {
     this.getEquipments();
@@ -25,7 +29,14 @@ export class ListComponent implements OnInit {
       res => {
         this.equipments = res;
       }
-    )
+    );
+  }
+
+  /**
+   * @description redirect to create page
+   */
+  public onCreate() {
+    this.router.navigate(['create']);
   }
 
 }

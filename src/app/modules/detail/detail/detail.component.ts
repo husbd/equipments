@@ -20,7 +20,6 @@ export class DetailComponent implements OnInit {
     private router: Router,
     private cmnServ: CommonService,
     private modalServ: ModalService,
-    
   ) { }
 
   /**

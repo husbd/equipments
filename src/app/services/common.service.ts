@@ -48,4 +48,13 @@ export class CommonService {
     return this.http.delete<any>(`${environment.equipment}/${id}`);
   }
 
+  /**
+   * @description Calls api to create equipment
+   * @param payload equipment
+   * @returns 
+   */
+   createEquipment(payload: Equipment): Observable<Equipment> {
+    return this.http.post<Equipment>(environment.equipment, payload);
+  }
+
 }

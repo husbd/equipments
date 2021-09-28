@@ -11,7 +11,7 @@ export class EquipmentFormComponent implements OnInit, OnChanges {
 
   @Input() equipment: Equipment | undefined;
   equipmentForm = this.fb.group({
-    id: new FormControl({value: '', disabled: true}, Validators.required),
+    id: new FormControl({value: '', disabled: true}),
     model: new FormControl('', Validators.required),
     brand: new FormControl(''),
     weight: new FormControl(''),
