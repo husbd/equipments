@@ -28,8 +28,14 @@ export class DetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(
       (params: ParamMap) => {
-        const id = params.get('id') as string;
-        this.getEquipmentById(id);
+        const _id = params.get('id') as string;
+        if (_id !== null && _id !== undefined && _id !== '') {
+          this.getEquipmentById(_id);
+        } else {
+          this.openModal('please provide a valid id!');
+          // redirect to list screen if failed to get id
+          this.router.navigate(['list']);
+        }
       }
     );
   }
@@ -42,6 +48,11 @@ export class DetailComponent implements OnInit {
     this.cmnServ.getEquipmentById(id).subscribe(
       res => {
         this.equipment = res;
+      },
+      err => {
+        this.openModal('API Failure');
+        // redirect to list screen if failed to get equipment by id
+        this.router.navigate(['list']);
       }
     );
   }
@@ -53,6 +64,9 @@ export class DetailComponent implements OnInit {
     this.cmnServ.updateEquipmentById(payload.id, payload).subscribe(
       res => {
         this.openModal('Updated equipment successfully!');
+      },
+      err => {
+        this.openModal('API Failure');
       }
     );
   }
@@ -66,6 +80,9 @@ export class DetailComponent implements OnInit {
       res => {
         this.openModal('Equipment deleted successfully!');
         this.router.navigate(['list']);
+      },
+      err => {
+        this.openModal('API Failure');
       }
     )
   }

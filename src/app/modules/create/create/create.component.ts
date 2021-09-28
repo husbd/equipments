@@ -30,6 +30,9 @@ export class CreateComponent implements OnInit {
       res => {
         this.openModal('Created new equipment successfully!');
         this.router.navigate(['detail', res.id]);
+      },
+      err => {
+        this.openModal('API Failure');
       }
     );
   }

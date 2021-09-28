@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Equipment } from 'src/app/models/equipment.model';
 import { CommonService } from 'src/app/services/common.service';
+import { ModalService } from 'src/app/shared/modal/modal.service';
 
 @Component({
   selector: 'app-list',
@@ -14,7 +15,8 @@ export class ListComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private cmnServ: CommonService
+    private cmnServ: CommonService,
+    private modalServ: ModalService,
   ) { }
 
   ngOnInit(): void {
@@ -28,6 +30,10 @@ export class ListComponent implements OnInit {
     this.cmnServ.getEquipments().subscribe(
       res => {
         this.equipments = res;
+      },
+      err => {
+        this.equipments = [];
+        this.openModal('API Failure');
       }
     );
   }
@@ -37,6 +43,13 @@ export class ListComponent implements OnInit {
    */
   public onCreate() {
     this.router.navigate(['create']);
+  }
+
+  /**
+   * @description open a modal and show msg
+   */
+   private openModal(info: string) {
+    this.modalServ.open(info);
   }
 
 }
