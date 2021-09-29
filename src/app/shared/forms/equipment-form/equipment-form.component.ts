@@ -1,15 +1,21 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
 import { Equipment } from 'src/app/models/equipment.model';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-equipment-form',
   templateUrl: './equipment-form.component.html',
   styleUrls: ['./equipment-form.component.scss']
 })
-export class EquipmentFormComponent implements OnInit, OnChanges {
+export class EquipmentFormComponent implements OnInit, OnDestroy {
 
-  @Input() equipment: Equipment | undefined;
+  isCreate$?: Observable<boolean | undefined>;
+
+  valueChangesSubscription?: Subscription;
+  equipmentSubscription?: Subscription;
+
   equipmentForm = this.fb.group({
     id: new FormControl({value: '', disabled: true}),
     model: new FormControl('', Validators.required),
@@ -18,56 +24,53 @@ export class EquipmentFormComponent implements OnInit, OnChanges {
     manufactureDate: new FormControl(''),
   });
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private cmnServ: CommonService
+  ) { }
 
   ngOnInit(): void {
-  }
-
-  /**
-   * @description populate forms on input change
-   * @param changes 
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.equipment !== null && this.equipment !== undefined) {
-      this.populateForm(this.equipment);
-    }
+    this.isCreate$ = this.cmnServ.getIsCreateFromStore();
+    this.equipmentSubscription = this.cmnServ.getEquipmentFromStore().subscribe(
+      res => {
+        this.populateForm(res);
+        // push latest value to store on value change
+        if (!this.valueChangesSubscription) {
+          this.valueChangesSubscription = this.equipmentForm.valueChanges.subscribe(
+            res => {
+              this.cmnServ.setUpdatedEquipmentToStore(this.equipmentForm.getRawValue());
+              this.cmnServ.setIsFormValidToStore(this.equipmentForm.valid);
+            }
+          );
+        }
+      }
+    );
   }
 
   /**
    * @description populate form with input equipment obj
    * @param equipment 
    */
-   private populateForm(equipment: Equipment) {
-    this.equipmentForm.get('id')?.setValue(equipment.id);
-    this.equipmentForm.get('model')?.setValue(equipment.model);
-    this.equipmentForm.get('brand')?.setValue(equipment.brand);
-    this.equipmentForm.get('weight')?.setValue(equipment.weight);
-    this.equipmentForm.get('manufactureDate')?.setValue(equipment.manufactureDate);
+  private populateForm(equipment?: Equipment) {
+    this.equipmentForm.get('id')?.setValue(equipment?.id);
+    this.equipmentForm.get('model')?.setValue(equipment?.model);
+    this.equipmentForm.get('brand')?.setValue(equipment?.brand);
+    this.equipmentForm.get('weight')?.setValue(equipment?.weight);
+    this.equipmentForm.get('manufactureDate')?.setValue(equipment?.manufactureDate);
   }
 
   /**
-   * @description getter for current form state
-   * @returns 
+   * @description clean up
    */
-  public getCurrentEquipment(): Equipment {
-    return this.equipmentForm.getRawValue();
-  }
-
-  /**
-   * @description check is id emtpy
-   * @returns 
-   */
-  public hasId(): boolean {
-    const _id = this.equipmentForm.get('id')?.value;
-    return _id !== null && _id !== undefined && _id !== '';
-  }
-
-  /**
-   * @description check is form valid
-   * @returns 
-   */
-  public isFormInvalid(): boolean {
-    return this.equipmentForm.invalid;
+  ngOnDestroy(): void {
+    if (this.valueChangesSubscription) {
+      this.valueChangesSubscription.unsubscribe();
+    }
+    if (this.equipmentSubscription) {
+      this.equipmentSubscription.unsubscribe();
+    }
+    // reset store upon leave
+    this.cmnServ.setIsFormValidToStore(false);
   }
 
 }

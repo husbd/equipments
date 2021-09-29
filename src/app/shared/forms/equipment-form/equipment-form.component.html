@@ -1,5 +1,5 @@
 <form [formGroup]="equipmentForm">
-    <div *ngIf="hasId()">
+    <div *ngIf="!(isCreate$ | async)">
         <label for="Id">Id: </label>
         <input id="id" type="text" formControlName="id">
     </div>

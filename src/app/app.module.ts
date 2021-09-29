@@ -8,6 +8,8 @@ import { CreateModule } from './modules/create/create.module';
 import { DetailModule } from './modules/detail/detail.module';
 import { ListModule } from './modules/list/list.module';
 import { ModalComponent } from './shared/modal/modal.component';
+import { StoreModule } from '@ngrx/store';
+import { appReducer } from './store/app.reducer';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { ModalComponent } from './shared/modal/modal.component';
     CreateModule,
     AppRoutingModule,
     HttpClientModule,
+    StoreModule.forRoot(appReducer),
   ],
   providers: [],
   bootstrap: [AppComponent]

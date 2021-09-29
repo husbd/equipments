@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Equipment } from 'src/app/models/equipment.model';
 import { CommonService } from 'src/app/services/common.service';
-import { EquipmentFormComponent } from 'src/app/shared/forms/equipment-form/equipment-form.component';
 import { ModalService } from 'src/app/shared/modal/modal.service';
 
 @Component({
@@ -12,6 +13,8 @@ import { ModalService } from 'src/app/shared/modal/modal.service';
 })
 export class CreateComponent implements OnInit {
 
+  isFormValid$?: Observable<boolean | undefined>;
+
   constructor(
     private router: Router,
     private cmnServ: CommonService,
@@ -19,6 +22,8 @@ export class CreateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.cmnServ.setIsCreateToStore(true);
+    this.isFormValid$ = this.cmnServ.getIsFormValidFromStore();
   }
 
   /**
@@ -40,9 +45,17 @@ export class CreateComponent implements OnInit {
   /**
    * @description on submit handler def
    */
-  public onSubmit(formComponent: EquipmentFormComponent) {
-    const payload = formComponent.getCurrentEquipment();
-    this.createEquipment(payload);
+  public onSubmit() {
+    this.cmnServ.getUpdatedEquipmentFromStore().pipe(take(1))
+    .subscribe(
+      res => {
+        if (res) {
+          this.createEquipment(res);
+        } else {
+          this.openModal('No change detacted!');
+        }
+      }
+    );
   }
 
   /**

@@ -1,7 +1,13 @@
 <h1>Equipment Detail</h1>
-<app-equipment-form #formComponent [equipment]="equipment"></app-equipment-form>
+<app-equipment-form></app-equipment-form>
 <a [routerLink]="['/list']">back</a>
 <span class="btn-row">
-    <button class="accept" (click)="onSubmit(formComponent)" [disabled]="formComponent.isFormInvalid()">Update</button>
+    <button
+        class="accept"
+        (click)="onSubmit()"
+        [disabled]="!(this.isFormValid$ | async)"
+    >
+        Update
+    </button>
     <button class="warn" (click)="onDelete()">Delete</button>
 </span>

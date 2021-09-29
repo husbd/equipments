@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Equipment } from 'src/app/models/equipment.model';
 import { CommonService } from 'src/app/services/common.service';
 import { ModalService } from 'src/app/shared/modal/modal.service';
-import { EquipmentFormComponent } from 'src/app/shared/forms/equipment-form/equipment-form.component';
 
 
 @Component({
@@ -11,9 +12,11 @@ import { EquipmentFormComponent } from 'src/app/shared/forms/equipment-form/equi
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss']
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, OnDestroy {
 
-  equipment: Equipment | undefined;
+  equipment?: Equipment;
+  isFormValid$?: Observable<boolean | undefined>;
+  paramSubscription?: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,9 +29,10 @@ export class DetailComponent implements OnInit {
    * @description get id from query param & get detail by id 
    */
   ngOnInit(): void {
-    this.route.paramMap.subscribe(
+    this.paramSubscription = this.route.paramMap.subscribe(
       (params: ParamMap) => {
         const _id = params.get('id') as string;
+        // check if id is empty
         if (_id !== null && _id !== undefined && _id !== '') {
           this.getEquipmentById(_id);
         } else {
@@ -38,6 +42,8 @@ export class DetailComponent implements OnInit {
         }
       }
     );
+
+    this.isFormValid$ = this.cmnServ.getIsFormValidFromStore();
   }
 
   /**
@@ -48,6 +54,8 @@ export class DetailComponent implements OnInit {
     this.cmnServ.getEquipmentById(id).subscribe(
       res => {
         this.equipment = res;
+        this.cmnServ.setEquipmentToStore(res);
+        this.cmnServ.setIsCreateToStore(false);
       },
       err => {
         this.openModal('API Failure');
@@ -102,9 +110,17 @@ export class DetailComponent implements OnInit {
   /**
    * @description on submit handler def
    */
-  public onSubmit(formComponent: EquipmentFormComponent) {
-    const payload = formComponent.getCurrentEquipment();
-    this.updateEquipmentById(payload);
+  public onSubmit() {
+    this.cmnServ.getUpdatedEquipmentFromStore().pipe(take(1))
+    .subscribe(
+      res => {
+        if (res) {
+          this.updateEquipmentById(res);
+        } else {
+          this.openModal('No change detacted!');
+        }
+      }
+    );
   }
 
   /**
@@ -112,6 +128,12 @@ export class DetailComponent implements OnInit {
    */
   private openModal(info: string) {
     this.modalServ.open(info);
+  }
+
+  ngOnDestroy(): void {
+    if (this.paramSubscription) {
+      this.paramSubscription.unsubscribe();
+    }
   }
 
 }
